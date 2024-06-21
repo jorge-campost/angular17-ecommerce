@@ -1,8 +1,9 @@
 <header class="text-gray-600 body-font">
   <div
-    class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center"
+    class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row justify-between"
   >
     <a
+      routerLink="/"
       class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0"
     >
       <svg
@@ -19,31 +20,72 @@
           d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
         ></path>
       </svg>
-      <span class="ml-3 text-xl">Tailblocks</span>
+      <span class="ml-3 text-xl">My Store ABC</span>
     </a>
-    <nav
-      class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center"
-    >
-      <a class="mr-5 hover:text-gray-900">First Link</a>
-      <a class="mr-5 hover:text-gray-900">Second Link</a>
-      <a class="mr-5 hover:text-gray-900">Third Link</a>
-      <a class="mr-5 hover:text-gray-900">Fourth Link</a>
-    </nav>
-    <button
-      class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
-    >
-      Button
-      <svg
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        class="w-4 h-4 ml-1"
-        viewBox="0 0 24 24"
+
+    <div class="flex items-center">
+      <a routerLink="/products" class="mr-6">Products</a>
+
+      <div
+        class="relative"
+        (mouseenter)="showCart.set(true)"
+        (mouseleave)="showCart.set(false)"
       >
-        <path d="M5 12h14M12 5l7 7-7 7"></path>
-      </svg>
-    </button>
+        <a routerLink="/checkout">
+          <svg
+            fill="none"
+            height="25"
+            viewBox="0 0 15 15"
+            width="25"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.978822 0.356323L0.0209961 0.643671L3.12789 11H14.9999V4.5C14.9999 3.11929 13.8806 2 12.4999 2H1.47192L0.978822 0.356323Z"
+              fill="black"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M5.5 12C4.67157 12 4 12.6716 4 13.5C4 14.3284 4.67157 15 5.5 15C6.32843 15 7 14.3284 7 13.5C7 12.6716 6.32843 12 5.5 12ZM5 13.5C5 13.2239 5.22386 13 5.5 13C5.77614 13 6 13.2239 6 13.5C6 13.7761 5.77614 14 5.5 14C5.22386 14 5 13.7761 5 13.5Z"
+              fill="black"
+              fill-rule="evenodd"
+            />
+            <path
+              clip-rule="evenodd"
+              d="M12.5 12C11.6716 12 11 12.6716 11 13.5C11 14.3284 11.6716 15 12.5 15C13.3284 15 14 14.3284 14 13.5C14 12.6716 13.3284 12 12.5 12ZM12 13.5C12 13.2239 12.2239 13 12.5 13C12.7761 13 13 13.2239 13 13.5C13 13.7761 12.7761 14 12.5 14C12.2239 14 12 13.7761 12 13.5Z"
+              fill="black"
+              fill-rule="evenodd"
+            />
+          </svg>
+          <span
+            class="absolute right-0 px-1 text-lg font-bold text-white -top-1"
+          >
+            {{ cartStore.productsCount() }}
+          </span></a
+        >
+        @if (showCart() && cartStore.productsCount() ) {
+
+        <div
+          [ngClass]="{ 'show-cart-animation': showCart() }"
+          class="absolute right-0 z-30 w-48 p-2 mt-2 text-white rounded-sm bg-slate-400"
+        >
+          @for (product of cartStore.products(); track $index) {
+          <div class="flex items-center justify-between">
+            <span>
+              {{ product.qty }} {{ product.title | slice : 0 : 10 }}
+              {{ product.subtotal || product.price | currency }}
+            </span>
+          </div>
+          }
+          <hr class="my-4 border-gray-500 border-t-1" />
+          <div class="flex justify-between py-3 font-light">
+            Total:
+            <span class="not-italic font-bold">
+              {{ cartStore.totalAmount() | currency }}
+            </span>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
   </div>
 </header>
